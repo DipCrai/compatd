@@ -1,0 +1,23 @@
+post_install() {
+    # Symlink libsystemd.so.0 -> libelogind.so.0
+    if [ ! -L /usr/lib/libsystemd.so.0 ]; then
+        ln -s libelogind.so.0 /usr/lib/libsystemd.so.0 2>/dev/null || true
+    fi
+    echo ":: compatd installed."
+    echo ":: systemctl wrapper is at /usr/bin/systemctl"
+    echo ":: Pacman hook enabled at /etc/pacman.d/hooks/compatd.hook"
+}
+
+post_upgrade() {
+    post_install
+}
+
+post_remove() {
+    # Remove symlink only if it points to elogind (ours)
+    if [ -L /usr/lib/libsystemd.so.0 ]; then
+        target=$(readlink /usr/lib/libsystemd.so.0)
+        if [ "$target" = "libelogind.so.0" ]; then
+            rm -f /usr/lib/libsystemd.so.0
+        fi
+    fi
+}

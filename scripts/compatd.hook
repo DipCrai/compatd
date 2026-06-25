@@ -1,0 +1,10 @@
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = File
+Target = usr/lib/systemd/system/*.service
+
+[Action]
+Description = Converting new systemd services to OpenRC...
+When = PostTransaction
+Exec = /usr/bin/compatd-post.sh

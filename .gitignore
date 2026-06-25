@@ -1,0 +1,5 @@
+target/
+pkg/
+src/compatd-*/
+*.pkg.tar.zst
+*.tar.gz
